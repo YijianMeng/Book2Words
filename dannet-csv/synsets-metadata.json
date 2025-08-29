@@ -1,0 +1,22 @@
+{"@context":"http:\/\/www.w3.org\/ns\/csvw",
+ "tables":
+ [{"url":"synsets.csv",
+   "tableSchema":
+   {"aboutUrl":"https:\/\/wordnet.dk\/dannet\/data\/{synset}",
+    "primaryKey":"synset",
+    "columns":
+    [{"name":"synset", "titles":"Synset"},
+     {"name":"definition",
+      "titles":"Definition",
+      "propertyUrl":
+      "http:\/\/www.w3.org\/2004\/02\/skos\/core#definition"},
+     {"name":"ontotype",
+      "titles":"Ontological Type(s)",
+      "separator":"; ",
+      "propertyUrl":
+      "https:\/\/wordnet.dk\/dannet\/concepts\/ontologicalType"},
+     {"virtual":true,
+      "propertyUrl":"rdf:type",
+      "valueUrl":
+      "http:\/\/www.w3.org\/ns\/lemon\/ontolex#LexicalConcept"}]}}],
+ "dialect":{"header":false}}

@@ -1,0 +1,11 @@
+{"@context":"http:\/\/www.w3.org\/ns\/csvw",
+ "tables":
+ [{"url":"examples.csv",
+   "tableSchema":
+   {"columns":
+    [{"name":"sense", "titles":"Sense"},
+     {"name":"example",
+      "propertyUrl":
+      "http:\/\/www.lexinfo.net\/ontology\/3.0\/lexinfo#senseExample",
+      "titles":"Example"}]}}],
+ "dialect":{"header":false}}

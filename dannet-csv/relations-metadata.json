@@ -1,0 +1,9 @@
+{"@context":"http:\/\/www.w3.org\/ns\/csvw",
+ "tables":
+ [{"url":"examples.csv",
+   "tableSchema":
+   {"columns":
+    [{"name":"from", "titles":"From synset"},
+     {"name":"relation", "titles":"Relation"},
+     {"name":"to", "titles":"To synset"}]}}],
+ "dialect":{"header":false}}

@@ -1,0 +1,21 @@
+{"@context":"http:\/\/www.w3.org\/ns\/csvw",
+ "tables":
+ [{"url":"words.csv",
+   "tableSchema":
+   {"aboutUrl":"https:\/\/wordnet.dk\/dannet\/data\/{word}",
+    "primaryKey":"word",
+    "columns":
+    [{"name":"word", "titles":"Word"},
+     {"name":"form",
+      "titles":"Written representation",
+      "propertyUrl":
+      "http:\/\/www.w3.org\/ns\/lemon\/ontolex#writtenRep"},
+     {"name":"pos",
+      "titles":"Part-of-speech",
+      "propertyUrl":
+      "http:\/\/www.lexinfo.net\/ontology\/3.0\/lexinfo#partOfSpeech"},
+     {"virtual":true,
+      "propertyUrl":"rdf:type",
+      "valueUrl":
+      "http:\/\/www.w3.org\/ns\/lemon\/ontolex#LexicalEntry"}]}}],
+ "dialect":{"header":false}}

@@ -1,0 +1,19 @@
+{"@context":"http:\/\/www.w3.org\/ns\/csvw",
+ "tables":
+ [{"url":"senses.csv",
+   "tableSchema":
+   {"columns":
+    [{"name":"to", "titles":"To synset"},
+     {"name":"relation",
+      "propertyUrl":
+      "https:\/\/wordnet.dk\/dannet\/schema\/inheritedRelation",
+      "titles":"Inherited relation"},
+     {"name":"from",
+      "propertyUrl":
+      "https:\/\/wordnet.dk\/dannet\/schema\/inheritedFrom",
+      "titles":"From synset"},
+     {"virtual":true,
+      "propertyUrl":"rdf:type",
+      "valueUrl":
+      "https:\/\/wordnet.dk\/dannet\/schema\/Inheritance"}]}}],
+ "dialect":{"header":false}}

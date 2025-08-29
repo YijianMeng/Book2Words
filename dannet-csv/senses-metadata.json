@@ -1,0 +1,25 @@
+{"@context":"http:\/\/www.w3.org\/ns\/csvw",
+ "tables":
+ [{"url":"senses.csv",
+   "tableSchema":
+   {"aboutUrl":"https:\/\/wordnet.dk\/dannet\/data\/{sense}",
+    "primaryKey":"sense",
+    "columns":
+    [{"name":"sense", "titles":"Sense"},
+     {"name":"synset",
+      "titles":"Synset",
+      "propertyUrl":
+      "http:\/\/www.w3.org\/ns\/lemon\/ontolex#isLexicalizedSenseOf"},
+     {"name":"word",
+      "titles":"Word",
+      "propertyUrl":
+      "http:\/\/www.w3.org\/ns\/lemon\/ontolex#isSenseOf"},
+     {"name":"note",
+      "titles":"Note",
+      "propertyUrl":
+      "http:\/\/www.lexinfo.net\/ontology\/3.0\/lexinfo#usageNote"},
+     {"virtual":true,
+      "propertyUrl":"rdf:type",
+      "valueUrl":
+      "http:\/\/www.w3.org\/ns\/lemon\/ontolex#LexicalSense"}]}}],
+ "dialect":{"header":false}}
