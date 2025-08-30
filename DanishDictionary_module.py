@@ -1,14 +1,22 @@
 import requests
-from googletrans import Translator
+from deep_translator import GoogleTranslator
 import wn
+from functools import lru_cache
 
-# Load WordNet resource (make sure you have the file locally)
-wn.add("dannet-wn-lmf.xml.gz")
+# --- Setup ---
+# Load WordNet resource only when needed
+WN_LOADED = False
 
-translator = Translator()
+# Initialize GoogleTranslator globally
+translator = GoogleTranslator(source='da', target='en')
+
+# Reuse a single session for Wiktionary requests
+session = requests.Session()
+session.headers.update({"User-Agent": "Camera2Dict/1.0 (your_email@example.com)"})
 
 
 # --- Wiktionary lookup ---
+@lru_cache(maxsize=256)
 def get_danish_definition(word: str) -> str | None:
     """Fetch Danish definition of a word from Wiktionary (if available)."""
     url = "https://da.wiktionary.org/w/api.php"
@@ -20,72 +28,78 @@ def get_danish_definition(word: str) -> str | None:
         "exintro": True,
         "explaintext": True,
     }
-    headers = {
-        "User-Agent": "Camera2Dict/1.0 (your_email@example.com)"  # replace email
-    }
-
-    response = requests.get(url, params=params, headers=headers)
-    if response.status_code != 200:
-        return None
 
     try:
+        response = session.get(url, params=params, timeout=5)
+        response.raise_for_status()
         data = response.json()
-    except requests.exceptions.JSONDecodeError:
+    except Exception:
         return None
 
-    page = next(iter(data["query"]["pages"].values()))
+    page = next(iter(data.get("query", {}).get("pages", {}).values()), {})
     definition = page.get("extract", "").strip()
     return definition if definition else None
 
 
 # --- WordNet lookup ---
+@lru_cache(maxsize=256)
 def get_danish_lexicon(word: str) -> list[str]:
     """Retrieve English translations of Danish WordNet definitions."""
-    synsets = wn.synsets(word, lang="da")  # "da" works for Danish
+    global WN_LOADED
+    if not WN_LOADED:
+        wn.add("dannet-wn-lmf.xml.gz")
+        WN_LOADED = True
+
+    synsets = wn.synsets(word, lang="da")
 
     translations = []
     for i_num, s in enumerate(synsets):
         da_def = s.definition()
-        en_def = translator.translate(da_def, src="da", dest="en").text
+        try:
+            en_def = translator.translate(da_def)
+        except Exception as e:
+            en_def = f"[Translation error: {e}]"
         translations.append(f"{i_num}: {en_def}")
     return translations
 
 
 # --- Combined translation ---
-def translate_danish_word(word: str) -> tuple[str | None, str]:
+def translate_danish_word(word: str, speedy: bool = False) -> tuple[str | None, str | list[str]]:
     """
     Translate a Danish word:
-      - Try Wiktionary definition (Danish + English).
-      - If unavailable, fall back to direct word translation.
+      - Try WordNet lexicon if speedy=False
+      - Else try Wiktionary definition
+      - Else fall back to direct word translation
     """
+    if not speedy:
+        lexicon = get_danish_lexicon(word)
+        if lexicon:
+            return None, lexicon
+
     danish_def = get_danish_definition(word)
-    lexicon = get_danish_lexicon(word)
-    if lexicon:
-        return None,lexicon
     if danish_def:
-        english_def = translator.translate(danish_def, src="da", dest="en").text
+        try:
+            english_def = translator.translate(danish_def)
+        except Exception as e:
+            english_def = f"[Translation error: {e}]"
         return danish_def, english_def
-    else:
-        english_translation = translator.translate(word, src="da", dest="en").text
-        return None, english_translation
+
+    try:
+        english_translation = translator.translate(word)
+    except Exception as e:
+        english_translation = f"[Translation error: {e}]"
+    return None, english_translation
 
 
-# --- Example usage (only runs when executed directly) ---
+# --- Example usage ---
 if __name__ == "__main__":
     words = ["går", "jeg", "hund", "Normalt"]
 
     for w in words:
-        da_def, en_def = translate_danish_word(w)
+        da_def, en_def = translate_danish_word(w, speedy=True)
         print(f"Word: {w}")
         print(f"  Danish definition: {da_def}")
-        print(f"  English translation: {en_def}")
-
-        lex = get_danish_lexicon(w)
-        if lex:
-            print("  Lexicon entries:")
-            for l in lex:
-                print("   -", l)
-        print()
+        print(f"  English: {en_def}")
 
     # Example single word
     word = "hund"
