@@ -222,36 +222,3 @@ for row in rows:
 conn.close()
 
 export_word_definitions_to_pdf()
-
-
-        #if NO_freq_word==True:
-        #    if lemma_i not in top_freq_danish:
-        #        word_def=translate_danish_word(word_i,speedy=True)
-        #        print(f"{word_i}: {word_def}")
-        #if NO_freq_word==False:
-        ##    word_def=translate_danish_word(word_i,speedy=True)
-         #   print(f"{word_i.lower()}: {word_def}")
-
-
-
-
-# --- Step 6: Filter words using majority language ---
-    #final_lines[line_id] = (majority_lang, filtered_words)
-
-#nltk.download('wordnet')
-
-
-# Example word
-#word = "ran"
-
-# # Get synsets (sets of synonyms with meanings)
-# synsets = wn.synsets(word)
-#
-# print(f"Definitions for '{word}':")
-# for syn in synsets:
-#     print(f"- {syn.definition()}")  # word definition
-#     print(f"  Examples: {syn.examples()}")  # example sentences
-#     print(f"  Synonyms: {syn.lemma_names()}")
-#     print(f"  Hypernyms (more general): {[h.name() for h in syn.hypernyms()]}")
-#     print(f"  Hyponyms (more specific): {[h.name() for h in syn.hyponyms()]}")
-#     print()
